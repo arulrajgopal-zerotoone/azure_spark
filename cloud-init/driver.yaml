@@ -1,0 +1,32 @@
+#cloud-config
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - openjdk-11-jdk
+  - scala
+  - wget
+
+runcmd:
+  - echo "Installing Spark on Driver..."
+
+  # Download Spark from Apache Archive
+  - wget -L https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz -O /tmp/spark.tgz
+
+  # Extract and move
+  - tar -xzf /tmp/spark.tgz -C /tmp
+  - mv /tmp/spark-3.5.1-bin-hadoop3 /opt/spark
+
+  # Set permissions
+  - chown -R ${USER}:${USER} /opt/spark
+
+  # Set environment variables globally
+  - echo 'export SPARK_HOME=/opt/spark' >> /etc/profile.d/spark.sh
+  - echo 'export PATH=$PATH:/opt/spark/bin:/opt/spark/sbin' >> /etc/profile.d/spark.sh
+  - chmod +x /etc/profile.d/spark.sh
+
+  # Start Spark Master
+  - /opt/spark/sbin/start-master.sh
+
+  - echo "Spark Driver Setup Completed."
