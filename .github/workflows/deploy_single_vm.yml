@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'spark_single_vm/**'
 
 jobs:
   deploy:
