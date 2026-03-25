@@ -184,3 +184,4 @@ resource "azurerm_linux_virtual_machine" "worker" {
 
   custom_data = base64encode(file("${path.module}/cloud-init/worker.yaml"))
 }
+
